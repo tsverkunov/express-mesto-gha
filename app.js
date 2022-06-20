@@ -14,11 +14,25 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
     useCreateIndex: true,
     useFindAndModify: false
   }
-).then(()=>console.log('connected'))
+)
+  .then(()=>console.log('mongoose connected'))
   .catch(e=>console.log(e));
+
+app.use((req, res, next) => {
+  req.user = {
+    _id: '62b0647cb0999f65a8594d74' // _id созданного пользователя
+  };
+
+  next();
+});
 
 app.use('/cards', require('./routes/cards'))
 app.use('/users', require('./routes/users'))
 
+// app.use((req, res) => {
+//   res.status(404).send({ message: 'Страница не найдена' });
+// });
+
 
 app.listen(PORT)
+
