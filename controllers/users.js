@@ -60,8 +60,8 @@ module.exports.updateProfile = (req, res) => {
 }
 
 module.exports.updateAvatar = (req, res) => {
-  const { link } = req.body
-  User.findByIdAndUpdate(req.user._id, { avatar: link }, {
+  const { avatar } = req.body
+  User.findByIdAndUpdate(req.user._id, { avatar }, {
     new: true,
   })
     .then(user => res.status(OK).send({ user }))
