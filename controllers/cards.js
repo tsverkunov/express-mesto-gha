@@ -19,7 +19,7 @@ module.exports.createCards = (req, res) => {
           .status(DATA_ERROR_CODE)
           .send({message: 'Переданы некорректные данные при создании карточки.'})
       }
-      res.status(ERROR_CODE).send({message: 'На сервере произошла ошибка.'})
+      return res.status(ERROR_CODE).send({message: 'На сервере произошла ошибка.'})
     })
 }
 
@@ -32,7 +32,7 @@ module.exports.deleteCard = (req, res) => {
           .status(NOT_FOUND_ERROR_CODE)
           .send({message: 'Карточка с указанным _id не найдена.'})
       }
-      res.status(ERROR_CODE).send({message: 'На сервере произошла ошибка.'})
+      return res.status(ERROR_CODE).send({message: 'На сервере произошла ошибка.'})
     })
 }
 
@@ -53,7 +53,7 @@ module.exports.addLike = (req, res) => {
           .status(NOT_FOUND_ERROR_CODE)
           .send({message: 'Передан несуществующий _id карточки'})
       }
-      res.status(ERROR_CODE).send({message: 'На сервере произошла ошибка.'})
+      return res.status(ERROR_CODE).send({message: 'На сервере произошла ошибка.'})
     })
 }
 
@@ -74,6 +74,6 @@ module.exports.removeLike = (req, res) => {
           .status(NOT_FOUND_ERROR_CODE)
           .send({message: 'Передан несуществующий _id карточки'})
       }
-      res.status(ERROR_CODE).send({message: 'На сервере произошла ошибка.'})
+      return res.status(ERROR_CODE).send({message: 'На сервере произошла ошибка.'})
     })
 }
