@@ -38,10 +38,10 @@ module.exports.createUser = (req, res) => {
 }
 
 module.exports.updateProfile = (req, res) => {
-  const {name} = req.body
-  User.findByIdAndUpdate(req.user._id, {name},     {
+  const { name } = req.body
+  User.findByIdAndUpdate(req.user._id, { name },     {
     new: true, // обработчик then получит на вход обновлённую запись
-    runValidators: true // данные будут валидированы перед изменением
+    // runValidators: true // данные будут валидированы перед изменением
   })
     .then(user => res.status(OK).send({ user }))
     .catch(err => {
@@ -60,10 +60,10 @@ module.exports.updateProfile = (req, res) => {
 }
 
 module.exports.updateAvatar = (req, res) => {
-  const {link} = req.body
-  User.findByIdAndUpdate(req.user._id, {avatar: link}, {
+  const { link } = req.body
+  User.findByIdAndUpdate(req.user._id, { avatar: link }, {
     new: true,
-    runValidators: true
+    // runValidators: true
   })
     .then(user => res.status(OK).send({ user }))
     .catch(err => {
