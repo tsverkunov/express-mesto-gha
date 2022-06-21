@@ -40,7 +40,7 @@ module.exports.updateProfile = (req, res) => {
     new: true, // обработчик then получит на вход обновлённую запись
     runValidators: true // данные будут валидированы перед изменением
   })
-    .then(profile => res.status(OK).send({ profile }))
+    .then(user => res.status(OK).send({ user }))
     .catch(err => {
       if(err.name === 'ValidationError') {
         return res
@@ -62,7 +62,7 @@ module.exports.updateAvatar = (req, res) => {
     new: true,
     runValidators: true
   })
-    .then(avatar => res.status(OK).send({ avatar }))
+    .then(user => res.status(OK).send({ user }))
     .catch(err => {
       if(err.name === 'ValidationError') {
         return res

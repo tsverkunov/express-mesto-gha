@@ -29,7 +29,7 @@ module.exports.deleteCard = (req, res) => {
     .catch(err => {
       if(err.name === 'CastError') {
         return res
-          .status(NOT_FOUND_ERROR_CODE)
+          .status(DATA_ERROR_CODE)
           .send({message: 'Карточка с указанным _id не найдена.'})
       }
       return res.status(ERROR_CODE).send({message: 'На сервере произошла ошибка.'})
@@ -50,7 +50,7 @@ module.exports.addLike = (req, res) => {
       }
       if(err.name === 'CastError') {
         return res
-          .status(NOT_FOUND_ERROR_CODE)
+          .status(DATA_ERROR_CODE)
           .send({message: 'Передан несуществующий _id карточки'})
       }
       return res.status(ERROR_CODE).send({message: 'На сервере произошла ошибка.'})
@@ -71,7 +71,7 @@ module.exports.removeLike = (req, res) => {
       }
       if(err.name === 'CastError') {
         return res
-          .status(NOT_FOUND_ERROR_CODE)
+          .status(DATA_ERROR_CODE)
           .send({message: 'Передан несуществующий _id карточки'})
       }
       return res.status(ERROR_CODE).send({message: 'На сервере произошла ошибка.'})
