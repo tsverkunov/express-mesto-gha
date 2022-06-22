@@ -52,18 +52,23 @@ module.exports.deleteCard = (req, res) => {
     });
 };
 
-function handleLike(req, res) {
-  ((like) => {
-    if (!like) {
-      return res.status(NOT_FOUND_ERROR_CODE).send({ message: 'Передан несуществующий _id карточки' });
-    }
-    return res.send({ like });
-  })
+module.exports.addLike = (req, res) => {
+  Card.findByIdAndUpdate(
+    req.params.cardId,
+    { $addToSet: { likes: req.user._id } },
+    { new: true },
+  )
+    .then((like) => {
+      if (!like) {
+        return res.status(NOT_FOUND_ERROR_CODE).send({ message: 'Передан несуществующий _id карточки' });
+      }
+      return res.send({ like });
+    })
     .catch((err) => {
       if (err.name === 'ValidationError') {
         return res
           .status(DATA_ERROR_CODE)
-          .send({ message: 'Переданы некорректные данные для снятии/постановки лайка.' });
+          .send({ message: 'Переданы некорректные данные для постановки лайка.' });
       }
       if (err.name === 'CastError') {
         return res
@@ -72,15 +77,6 @@ function handleLike(req, res) {
       }
       return res.status(ERROR_CODE).send({ message: 'На сервере произошла ошибка.' });
     });
-}
-
-module.exports.addLike = (req, res) => {
-  Card.findByIdAndUpdate(
-    req.params.cardId,
-    { $addToSet: { likes: req.user._id } },
-    { new: true },
-  )
-    .then(() => handleLike(req, res));
 };
 
 module.exports.removeLike = (req, res) => {
@@ -89,5 +85,23 @@ module.exports.removeLike = (req, res) => {
     { $pull: { likes: req.user._id } },
     { new: true },
   )
-    .then(() => handleLike(req, res));
+    .then((like) => {
+      if (!like) {
+        return res.status(NOT_FOUND_ERROR_CODE).send({ message: 'Передан несуществующий _id карточки' });
+      }
+      return res.send({ like });
+    })
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        return res
+          .status(DATA_ERROR_CODE)
+          .send({ message: 'Переданы некорректные данные для снятии лайка.' });
+      }
+      if (err.name === 'CastError') {
+        return res
+          .status(DATA_ERROR_CODE)
+          .send({ message: 'Передан несуществующий _id карточки' });
+      }
+      return res.status(ERROR_CODE).send({ message: 'На сервере произошла ошибка.' });
+    });
 };
