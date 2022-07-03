@@ -3,7 +3,7 @@ const express = require('express');
 const rateLimit = require('express-rate-limit');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const { celebrate, Joi } = require('celebrate');
+const { celebrate, Joi, errors } = require('celebrate');
 const { login, createUser } = require('./controllers/users');
 const { auth } = require('./middlewares/auth');
 const { NOT_FOUND_ERROR_CODE } = require('./utils/constants');
@@ -57,6 +57,8 @@ app.use('/users', require('./routes/users'));
 app.use((req, res) => {
   res.status(NOT_FOUND_ERROR_CODE).send({ message: 'Страница не найдена' });
 });
+
+app.use(errors());
 
 // eslint-disable-next-line
 app.use((err, req, res, next) => {
