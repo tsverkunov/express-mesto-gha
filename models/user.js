@@ -1,6 +1,4 @@
 const mongoose = require('mongoose');
-const validator = require('validator');
-const regex = /\w+@\w+\.\w+/gi;
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -23,9 +21,6 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
-    // validate: {
-    //   validator: (email) => isEmail(email),
-    // },
   },
   password: {
     type: String,

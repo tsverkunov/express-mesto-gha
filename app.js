@@ -4,11 +4,10 @@ const rateLimit = require('express-rate-limit');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const { celebrate, Joi } = require('celebrate');
-
 const { login, createUser } = require('./controllers/users');
 const { auth } = require('./middlewares/auth');
-
 const { NOT_FOUND_ERROR_CODE } = require('./utils/constants');
+
 const { PORT = 3000 } = process.env;
 
 const app = express();
@@ -30,7 +29,7 @@ app.post(
   '/signin',
   celebrate({
     body: Joi.object().keys({
-      email: Joi.string().required(),
+      email: Joi.string().required().email(),
       password: Joi.string().required().min(8),
     }),
   }),
@@ -42,7 +41,7 @@ app.post(
     body: Joi.object().keys({
       name: Joi.string().min(2).max(30),
       about: Joi.string().min(2).max(30),
-      avatar: Joi.string().custom(),
+      avatar: Joi.string(),
       email: Joi.string().required().email(),
       password: Joi.string().required().min(8),
     }),
@@ -59,6 +58,7 @@ app.use((req, res) => {
   res.status(NOT_FOUND_ERROR_CODE).send({ message: 'Страница не найдена' });
 });
 
+// eslint-disable-next-line
 app.use((err, req, res, next) => {
   const { statusCode = 500, message } = err;
   res

@@ -1,7 +1,7 @@
 const Card = require('../models/card');
-const DataError = require('../utils/errors');
-const OwnerError = require('../utils/errors');
-const NotFoundError = require('../utils/errors');
+const DataError = require('../errors/DataError');
+const OwnerError = require('../errors/OwnerError');
+const NotFoundError = require('../errors/NotFoundError');
 
 module.exports.getCards = (req, res, next) => {
   Card.find(
@@ -24,7 +24,8 @@ module.exports.createCards = (req, res, next) => {
       if (err.name === 'ValidationError') {
         return next(new DataError('Переданы некорректные данные при создании карточки.'));
       }
-      next(err);
+
+      return next(err);
     });
 };
 
@@ -51,10 +52,12 @@ module.exports.deleteCard = (req, res, next) => {
           if (err.name === 'CastError') {
             return next(new DataError('Карточка с указанным _id не найдена.'));
           }
-          next(err);
+
+          return next(err);
         });
     })
-    .catch((err) => next(new OwnerError(err.message)),
+    .catch(
+      (err) => next(new OwnerError(err.message)),
     );
 };
 
@@ -77,7 +80,7 @@ module.exports.addLike = (req, res, next) => {
       if (err.name === 'CastError') {
         return next(new DataError('Передан несуществующий _id карточки'));
       }
-      next(err);
+      return next(err);
     });
 };
 
@@ -100,6 +103,6 @@ module.exports.removeLike = (req, res, next) => {
       if (err.name === 'CastError') {
         return next(new DataError('Передан несуществующий _id карточки'));
       }
-      next(err);
+      return next(err);
     });
 };

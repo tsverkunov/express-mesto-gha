@@ -2,11 +2,12 @@ const bcrypt = require('bcryptjs');
 const User = require('../models/user');
 const { createToken } = require('../utils/jwt');
 
-const { EMAIL_OR_PASSWORD_ERROR_CODE, MONGO_DUPLICATE_ERROR_CODE, } = require('../utils/constants');
-const NotFoundError = require('../utils/errors');
-const DataError = require('../utils/errors');
-const DuplicateError = require('../utils/errors');
-const EmailOrPasswordError = require('../utils/errors');
+const { EMAIL_OR_PASSWORD_ERROR_CODE, MONGO_DUPLICATE_ERROR_CODE } = require('../utils/constants');
+
+const DataError = require('../errors/DataError');
+const NotFoundError = require('../errors/NotFoundError');
+const DuplicateError = require('../errors/DuplicateError');
+const EmailOrPasswordError = require('../errors/EmailOfPasswordError');
 
 module.exports.getUsers = (req, res, next) => {
   User.find({})
@@ -26,12 +27,18 @@ module.exports.getUser = (req, res, next) => {
       if (err.name === 'CastError') {
         return next(new DataError('Пользователь с указанным _id не найден.'));
       }
-      next(err);
+      return next(err);
     });
 };
 
 module.exports.createUser = (req, res, next) => {
-  const { name, about, avatar, email, password } = req.body;
+  const {
+    name,
+    about,
+    avatar,
+    email,
+    password,
+  } = req.body;
 
   bcrypt.hash(password, 10)
     .then((hash) => User.create({
@@ -51,7 +58,7 @@ module.exports.createUser = (req, res, next) => {
       if (err.code === MONGO_DUPLICATE_ERROR_CODE) {
         return next(new DuplicateError('Email занят'));
       }
-      next(err);
+      return next(err);
     });
 };
 
@@ -65,7 +72,7 @@ module.exports.getProfile = (req, res, next) => {
       if (err.name === 'CastError') {
         return next(new DataError('Пользователь с указанным _id не найден.'));
       }
-      next(err);
+      return next(err);
     });
 };
 
@@ -88,7 +95,7 @@ module.exports.updateProfile = (req, res, next) => {
       if (err.name === 'CastError') {
         return next(new DataError('Пользователь с указанным _id не найден.'));
       }
-      next(err);
+      return next(err);
     });
 };
 
@@ -111,7 +118,7 @@ module.exports.updateAvatar = (req, res, next) => {
       if (err.name === 'CastError') {
         return next(new DataError('Пользователь с указанным _id не найден.'));
       }
-      next(err);
+      return next(err);
     });
 };
 
@@ -132,10 +139,8 @@ module.exports.login = (req, res, next) => {
           return user;
         });
     })
-    .then((user) => {
-      return createToken({ _id: user._id });
-    })
-    .then(token => {
+    .then((user) => createToken({ _id: user._id }))
+    .then((token) => {
       res.cookie('jwt', token, {
         maxAge: 3600000 * 24 * 7,
         httpOnly: true,
@@ -147,8 +152,6 @@ module.exports.login = (req, res, next) => {
       if (err.statusCode === EMAIL_OR_PASSWORD_ERROR_CODE) {
         return next(new EmailOrPasswordError(err.message));
       }
-      next(err);
+      return next(err);
     });
 };
-
-
