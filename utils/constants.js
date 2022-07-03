@@ -1,5 +1,6 @@
 module.exports.DATA_ERROR_CODE = 400;
 module.exports.EMAIL_OR_PASSWORD_ERROR_CODE = 401;
+module.exports.ONLY_OWNER_ERROR_CODE = 403;
 module.exports.NOT_FOUND_ERROR_CODE = 404;
 module.exports.DUPLICATE_EMAIL_ERROR_CODE = 409;
 module.exports.ERROR_CODE = 500;
