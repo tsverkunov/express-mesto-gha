@@ -7,7 +7,12 @@ module.exports.getCards = (req, res, next) => {
   Card.find(
     {},
   )
-    .then((cards) => res.send({ cards }))
+    .then((cards) => {
+      if (!cards) {
+        throw new DataError('Карточки не получены.')
+      }
+      res.send({ cards })
+    })
     .catch(next);
 };
 
