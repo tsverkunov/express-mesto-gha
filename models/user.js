@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { regExpLink } = require('../utils/constants');
+const { urlValidation } = require('../utils/urlValidator');
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -16,10 +16,7 @@ const userSchema = new mongoose.Schema({
   },
   avatar: {
     type: String,
-    validate: {
-      validator: (v) => regExpLink.test(v),
-      message: (props) => `${props.value} ссылка не валидна!`,
-    },
+    validate: urlValidation,
     default: 'https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png',
   },
   email: {

@@ -40,6 +40,9 @@ module.exports.createUser = (req, res, next) => {
     password,
   } = req.body;
 
+  if (!email || !password) {
+    throw new DataError('Не введен email или пароль.');
+  }
   bcrypt.hash(password, 10)
     .then((hash) => User.create({
       name,

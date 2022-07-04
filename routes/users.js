@@ -11,6 +11,7 @@ const { urlValidation } = require('../utils/urlValidator');
 
 router.get('/', getUsers);
 router.get('/me', getProfile);
+
 router.get(
   '/:userId',
   celebrate({
@@ -20,6 +21,7 @@ router.get(
   }),
   getUser,
 );
+
 router.patch(
   '/me',
   celebrate({
@@ -30,11 +32,12 @@ router.patch(
   }),
   updateProfile,
 );
+
 router.patch(
   '/me/avatar',
   celebrate({
     body: Joi.object().keys({
-      avatar: Joi.string().required().custom(urlValidation),
+      avatar: Joi.string().custom(urlValidation).required(),
     }),
   }),
   updateAvatar,
