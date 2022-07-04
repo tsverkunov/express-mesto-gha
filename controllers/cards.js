@@ -40,14 +40,15 @@ module.exports.createCards = (req, res, next) => {
 module.exports.deleteCard = (req, res, next) => {
   Card.findById(req.params.cardId)
     .then((card) => {
+      if (!card) {
+        throw new NotFoundError('Карточка с указанным _id не найдена.');
+      }
       if (String(card.owner) !== String(req.user._id)) {
         throw new OwnerError('Вы не можете удалить чужую карточку.');
       }
     })
     .then(() => {
-      Card.findByIdAndRemove(
-        req.params.cardId,
-      )
+      Card.findByIdAndRemove(req.params.cardId)
         .then((card) => {
           if (!card) {
             throw new NotFoundError('Карточка с указанным _id не найдена.');
@@ -62,9 +63,7 @@ module.exports.deleteCard = (req, res, next) => {
           return next(err);
         });
     })
-    .catch(
-      (err) => next(new OwnerError(err.message)),
-    );
+    .catch(next);
 };
 
 module.exports.addLike = (req, res, next) => {
