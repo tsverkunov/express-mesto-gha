@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const { regExpLink } = require('../utils/constants');
 const { urlValidation } = require('../utils/urlValidator');
 
 const cardSchema = new mongoose.Schema({
