@@ -6,9 +6,6 @@ const DUPLICATE_EMAIL_ERROR_CODE = 409;
 const ERROR_CODE = 500;
 const MONGO_DUPLICATE_ERROR_CODE = 11000;
 
-/* eslint-disable no-console, no-control-regex */
-const regExpLink = /http(s)?:\/\/.(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&/=]*)/g;
-
 module.exports = {
   DATA_ERROR_CODE,
   EMAIL_OR_PASSWORD_ERROR_CODE,
@@ -17,5 +14,4 @@ module.exports = {
   DUPLICATE_EMAIL_ERROR_CODE,
   ERROR_CODE,
   MONGO_DUPLICATE_ERROR_CODE,
-  regExpLink,
 };
