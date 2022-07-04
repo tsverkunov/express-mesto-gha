@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { regExpLink } = require('../utils/constants');
+const { urlValidation } = require('../utils/urlValidator');
 
 const cardSchema = new mongoose.Schema({
   name: {
@@ -10,10 +11,7 @@ const cardSchema = new mongoose.Schema({
   },
   link: {
     type: String,
-    validate: {
-      validator: (v) => regExpLink.test(v),
-      message: (props) => `${props.value} ссылка не валидна!`,
-    },
+    validate: urlValidation,
     required: true,
   },
   owner: {
