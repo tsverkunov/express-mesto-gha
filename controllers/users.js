@@ -155,7 +155,7 @@ module.exports.login = (req, res, next) => {
         httpOnly: true,
       });
 
-      return res.send(token);
+      return res.send({ token });
     })
     .catch((err) => {
       if (err.statusCode === EMAIL_OR_PASSWORD_ERROR_CODE) {
