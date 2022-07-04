@@ -4,9 +4,7 @@ const OwnerError = require('../errors/OwnerError');
 const NotFoundError = require('../errors/NotFoundError');
 
 module.exports.getCards = (req, res, next) => {
-  Card.find(
-    {},
-  )
+  Card.find({})
     .then((cards) => {
       if (!cards) {
         throw new DataError('Карточки не получены.');
@@ -19,9 +17,6 @@ module.exports.getCards = (req, res, next) => {
 module.exports.createCards = (req, res, next) => {
   const { name, link } = req.body;
   const owner = req.user._id;
-  // if (!name || !link) {
-  //   throw new DataError('нет данных');
-  // }
   Card.create(
     {
       name, link, owner,
@@ -59,7 +54,6 @@ module.exports.deleteCard = (req, res, next) => {
           if (err.name === 'CastError') {
             return next(new DataError('Карточка с указанным _id не найдена.'));
           }
-
           return next(err);
         });
     })
