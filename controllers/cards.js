@@ -19,6 +19,9 @@ module.exports.getCards = (req, res, next) => {
 module.exports.createCards = (req, res, next) => {
   const { name, link } = req.body;
   const owner = req.user._id;
+  // if (!name || !link) {
+  //   throw new DataError('нет данных');
+  // }
   Card.create(
     {
       name, link, owner,
