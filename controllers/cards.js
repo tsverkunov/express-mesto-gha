@@ -9,9 +9,9 @@ module.exports.getCards = (req, res, next) => {
   )
     .then((cards) => {
       if (!cards) {
-        throw new DataError('Карточки не получены.')
+        throw new DataError('Карточки не получены.');
       }
-      res.send({ cards })
+      res.send({ cards });
     })
     .catch(next);
 };

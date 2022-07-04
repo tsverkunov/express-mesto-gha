@@ -7,6 +7,7 @@ const { celebrate, Joi, errors } = require('celebrate');
 const { login, createUser } = require('./controllers/users');
 const { auth } = require('./middlewares/auth');
 const { NOT_FOUND_ERROR_CODE } = require('./utils/constants');
+const { urlValidation } = require('./utils/urlValidator');
 
 const { PORT = 3000 } = process.env;
 
@@ -41,7 +42,7 @@ app.post(
     body: Joi.object().keys({
       name: Joi.string().min(2).max(30),
       about: Joi.string().min(2).max(30),
-      avatar: Joi.string(),
+      avatar: Joi.string().custom(urlValidation),
       email: Joi.string().required().email(),
       password: Joi.string().required().min(8),
     }),
