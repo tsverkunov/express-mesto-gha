@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const { celebrate, Joi, errors } = require('celebrate');
 const { login, createUser } = require('./controllers/users');
 const { auth } = require('./middlewares/auth');
+const {requestLogger, errorLogger} = require('./middlewares/logger')
 const { urlValidation } = require('./utils/urlValidator');
 const NotFoundError = require('./errors/NotFoundError');
 
@@ -27,6 +28,8 @@ mongoose.connect('mongodb://localhost:27017/mestodb')
   .then(() => console.log('mongoose connected'))
   // eslint-disable-next-line no-console
   .catch((e) => console.log(e));
+
+app.use(requestLogger)
 
 app.post(
   '/signin',
@@ -57,6 +60,8 @@ app.use(auth);
 
 app.use('/cards', require('./routes/cards'));
 app.use('/users', require('./routes/users'));
+
+app.use(errorLogger)
 
 app.use((req, res, next) => next(new NotFoundError('Страница не найдена')));
 
