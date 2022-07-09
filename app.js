@@ -6,7 +6,7 @@ const bodyParser = require('body-parser');
 const { celebrate, Joi, errors } = require('celebrate');
 const { login, createUser } = require('./controllers/users');
 const { auth } = require('./middlewares/auth');
-const {requestLogger, errorLogger} = require('./middlewares/logger')
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { urlValidation } = require('./utils/urlValidator');
 const NotFoundError = require('./errors/NotFoundError');
 
@@ -19,6 +19,32 @@ const limiter = rateLimit({
   max: 100,
 });
 
+const allowedCors = [
+  'http://tsverkunov.mesto.students.nomorepartiesxyz.ru/',
+  'https://tsverkunov.mesto.students.nomorepartiesxyz.ru/',
+  'localhost:3000',
+];
+
+app.use((req, res, next) => {
+  const { origin } = req.headers;
+  if (allowedCors.includes(origin)) {
+    res.header('Access-Control-Allow-Origin', origin);
+  }
+
+  const { method } = req;
+  const DEFAULT_ALLOWED_METHODS = 'GET,HEAD,PUT,PATCH,POST,DELETE';
+  if (method === 'OPTIONS') {
+    res.header('Access-Control-Allow-Methods', DEFAULT_ALLOWED_METHODS);
+  }
+
+  const requestHeaders = req.headers['access-control-allow-origin'];
+  if (method === 'OPTIONS') {
+    res.header('Access-Control-Allow-Headers', requestHeaders);
+  }
+
+  next();
+});
+
 app.use(limiter);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -29,7 +55,7 @@ mongoose.connect('mongodb://localhost:27017/mestodb')
   // eslint-disable-next-line no-console
   .catch((e) => console.log(e));
 
-app.use(requestLogger)
+app.use(requestLogger);
 
 app.post(
   '/signin',
@@ -61,7 +87,7 @@ app.use(auth);
 app.use('/cards', require('./routes/cards'));
 app.use('/users', require('./routes/users'));
 
-app.use(errorLogger)
+app.use(errorLogger);
 
 app.use((req, res, next) => next(new NotFoundError('Страница не найдена')));
 
