@@ -19,35 +19,35 @@ const limiter = rateLimit({
   max: 100,
 });
 
-// const allowedCors = [
-//   'http://tsverkunov.mesto.students.nomorepartiesxyz.ru/',
-//   'https://tsverkunov.mesto.students.nomorepartiesxyz.ru/',
-//   'http://api.tsverkunov.mesto.students.nomorepartiesxyz.ru/',
-//   'https://api.tsverkunov.mesto.students.nomorepartiesxyz.ru/',
-//   'http://tsverkunov-mesto-b.nomorepartiesxyz.ru/',
-//   'https://tsverkunov-mesto-b.nomorepartiesxyz.ru/',
-//   'localhost:3000',
-// ];
-//
-// app.use((req, res, next) => {
-//   const { origin } = req.headers;
-//   if (allowedCors.includes(origin)) {
-//     res.header('Access-Control-Allow-Origin', origin);
-//   }
-//
-//   const { method } = req;
-//   const DEFAULT_ALLOWED_METHODS = 'GET,HEAD,PUT,PATCH,POST,DELETE';
-//   if (method === 'OPTIONS') {
-//     res.header('Access-Control-Allow-Methods', DEFAULT_ALLOWED_METHODS);
-//   }
-//
-//   const requestHeaders = req.headers['access-control-allow-origin'];
-//   if (method === 'OPTIONS') {
-//     res.header('Access-Control-Allow-Headers', requestHeaders);
-//   }
-//
-//   next();
-// });
+const allowedCors = [
+  'http://tsverkunov.mesto.students.nomorepartiesxyz.ru/',
+  'https://tsverkunov.mesto.students.nomorepartiesxyz.ru/',
+  'http://api.tsverkunov.mesto.students.nomorepartiesxyz.ru/',
+  'https://api.tsverkunov.mesto.students.nomorepartiesxyz.ru/',
+  'http://tsverkunov-mesto-b.nomorepartiesxyz.ru/',
+  'https://tsverkunov-mesto-b.nomorepartiesxyz.ru/',
+  'localhost:3000',
+];
+
+app.use((req, res, next) => {
+  const { origin } = req.headers;
+  if (allowedCors.includes(origin)) {
+    res.header('Access-Control-Allow-Origin', origin);
+  }
+
+  const { method } = req;
+  const DEFAULT_ALLOWED_METHODS = 'GET,HEAD,PUT,PATCH,POST,DELETE';
+  if (method === 'OPTIONS') {
+    res.header('Access-Control-Allow-Methods', DEFAULT_ALLOWED_METHODS);
+  }
+
+  const requestHeaders = req.headers['access-control-allow-origin'];
+  if (method === 'OPTIONS') {
+    res.header('Access-Control-Allow-Headers', requestHeaders);
+  }
+
+  next();
+});
 
 app.use(limiter);
 app.use(bodyParser.json());
