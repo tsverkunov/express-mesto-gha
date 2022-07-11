@@ -22,8 +22,6 @@ const limiter = rateLimit({
 const allowedCors = [
   'http://tsverkunov.mesto.students.nomorepartiesxyz.ru',
   'https://tsverkunov.mesto.students.nomorepartiesxyz.ru',
-  'http://api.tsverkunov.mesto.students.nomorepartiesxyz.ru',
-  'https://api.tsverkunov.mesto.students.nomorepartiesxyz.ru',
   'http://tsverkunov-mesto-b.nomorepartiesxyz.ru',
   'https://tsverkunov-mesto-b.nomorepartiesxyz.ru',
   'localhost:3000',
