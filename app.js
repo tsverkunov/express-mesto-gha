@@ -7,8 +7,7 @@ const cookieParser = require('cookie-parser')
 const { celebrate, Joi, errors } = require('celebrate');
 const { login, createUser } = require('./controllers/users');
 const { auth } = require('./middlewares/auth');
-const { allowedCors } = require('./middlewares/cors');
-const cors = require('cors')
+const { cors } = require('./middlewares/cors');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { urlValidation } = require('./utils/urlValidator');
 const NotFoundError = require('./errors/NotFoundError');
@@ -22,12 +21,12 @@ const limiter = rateLimit({
   max: 100,
 });
 
-// app.use(cors)
+app.use(cors)
 
-app.use(cors({
-  origin: allowedCors, // список доменов
-  credentials: true,
-}));
+// app.use(cors({
+//   origin: allowedCors,
+//   credentials: true,
+// }));
 
 app.use(limiter);
 app.use(bodyParser.json());
