@@ -34,7 +34,7 @@ app.use((req, res, next) => {
   const requestHeaders = req.headers['access-control-allow-origin'];
 
   if (allowedCors.includes(origin)) {
-    res.header('Access-Control-Allow-Origin', origin);
+    return res.header('Access-Control-Allow-Origin', origin);
   }
 
   if (method === 'OPTIONS') {
