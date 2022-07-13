@@ -63,14 +63,14 @@ module.exports.deleteCard = (req, res, next) => {
 module.exports.addLike = (req, res, next) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
-    { $addToSet: { likes: { _id: req.user._id } } },
+    { $addToSet: { likes: req.user._id } },
     { new: true },
   )
-    .then((like) => {
-      if (!like) {
+    .then((card) => {
+      if (!card.likes) {
         throw new NotFoundError('Передан несуществующий _id карточки');
       }
-      return res.send({ like });
+      return res.send({ card });
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -86,7 +86,7 @@ module.exports.addLike = (req, res, next) => {
 module.exports.removeLike = (req, res, next) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
-    { $pull: { likes: { _id: req.user._id } } },
+    { $pull: { likes: req.user._id } },
     { new: true },
   )
     .then((like) => {
