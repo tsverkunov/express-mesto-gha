@@ -155,13 +155,13 @@ module.exports.login = (req, res, next) => {
       }
     })
 
-    .then((token) => {
-      res.cookie('jwt', token, {
+    .then((data) => {
+      res.cookie('jwt', data.token, {
         maxAge: 3600000 * 24 * 7,
         httpOnly: true,
       });
 
-      return res.send({ user });
+      return res.send( data.user );
     })
     .catch((err) => {
       if (err.statusCode === EMAIL_OR_PASSWORD_ERROR_CODE) {
