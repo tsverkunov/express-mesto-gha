@@ -24,7 +24,7 @@ module.exports.auth = (req, res, next) => {
 //   const { authorization } = req.headers;
 //   console.log(authorization)
 //   console.log(req.cookies)
-//   if (!authorization || !authorization.startsWith('jwt= ')) {
+//   if (!authorization || !authorization.startsWith('Bearer ')) {
 //     throw new EmailOrPasswordError('Необходимо авторизоваться');
 //   }
 //
