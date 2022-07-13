@@ -148,20 +148,14 @@ module.exports.login = (req, res, next) => {
           return user;
         });
     })
-    .then((user) => {
-      return {
-        token: createToken({ _id: user._id }),
-        user
-      }
-    })
-
-    .then((data) => {
-      res.cookie('jwt', data.token, {
+    .then((user) => createToken({ _id: user._id }))
+    .then((token) => {
+      res.cookie('jwt', token, {
         maxAge: 3600000 * 24 * 7,
         httpOnly: true,
       });
 
-      return res.send( data.user );
+      return res.send({ token });
     })
     .catch((err) => {
       if (err.statusCode === EMAIL_OR_PASSWORD_ERROR_CODE) {
