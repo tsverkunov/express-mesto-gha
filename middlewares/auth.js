@@ -3,7 +3,6 @@ const EmailOrPasswordError = require('../errors/EmailOfPasswordError');
 
 module.exports.auth = (req, res, next) => {
   const token = req.cookies.jwt;
-  console.log(req.cookies.jwt)
   if (!token) {
     throw new EmailOrPasswordError('Необходимо авторизоваться');
   }
