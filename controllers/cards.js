@@ -90,7 +90,7 @@ module.exports.removeLike = (req, res, next) => {
     { new: true },
   )
     .then((card) => {
-      if (!card.like) {
+      if (!card.likes) {
         throw new NotFoundError('Передан несуществующий _id карточки');
       }
       return res.send({ card });
