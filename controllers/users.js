@@ -148,13 +148,11 @@ module.exports.login = (req, res, next) => {
           return user;
         });
     })
-    .then((user) => {
-      return {
-        token:createToken({ _id: user._id }),
-        user
-      }
-    })
-    .then(({token, user}) => {
+    .then((user) => ({
+      token: createToken({ _id: user._id }),
+      user,
+    }))
+    .then(({ token, user }) => {
       res.cookie('jwt', token, {
         maxAge: 3600000 * 24 * 7,
         httpOnly: true,

@@ -17,24 +17,3 @@ module.exports.auth = (req, res, next) => {
 
   next();
 };
-
-
-// module.exports.auth = (req, res, next) => {
-//   const { authorization } = req.headers;
-//   console.log(authorization)
-//   console.log(req.cookies)
-//   if (!authorization || !authorization.startsWith('Bearer ')) {
-//     throw new EmailOrPasswordError('Необходимо авторизоваться');
-//   }
-//
-//   const token = authorization.replace('Bearer ', '');
-//   let payload;
-//   try {
-//     payload = checkToken(token);
-//   } catch (err) {
-//     next(new EmailOrPasswordError('Необходимо авторизоваться'));
-//   }
-//   req.user = payload;
-//
-//   next();
-// };
