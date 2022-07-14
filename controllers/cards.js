@@ -89,11 +89,11 @@ module.exports.removeLike = (req, res, next) => {
     { $pull: { likes: req.user._id } },
     { new: true },
   )
-    .then((like) => {
-      if (!like) {
+    .then((card) => {
+      if (!card.like) {
         throw new NotFoundError('Передан несуществующий _id карточки');
       }
-      return res.send({ like });
+      return res.send({ card });
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
