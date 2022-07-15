@@ -4,13 +4,12 @@ const rateLimit = require('express-rate-limit');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const { celebrate, Joi, errors } = require('celebrate');
-const { login, createUser } = require('./controllers/users');
+const { errors } = require('celebrate');
 const { auth } = require('./middlewares/auth');
 const { cors } = require('./middlewares/cors');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
-const { urlValidation } = require('./utils/urlValidator');
 const NotFoundError = require('./errors/NotFoundError');
+const { centralErrorProcessing } = require('./middlewares/centralErrorProcessing');
 
 const { PORT = 3000 } = process.env;
 
@@ -23,14 +22,11 @@ const limiter = rateLimit({
 
 app.use(cors);
 
-// app.use(cors({
-//   origin: allowedCors,
-//   credentials: true,
-// }));
-
+app.use(requestLogger);
 app.use(limiter);
 app.use(bodyParser.json());
 app.use(cookieParser());
+
 app.use(bodyParser.urlencoded({ extended: true }));
 
 mongoose.connect('mongodb://localhost:27017/mestodb')
@@ -39,32 +35,8 @@ mongoose.connect('mongodb://localhost:27017/mestodb')
   // eslint-disable-next-line no-console
   .catch((e) => console.log(e));
 
-app.use(requestLogger);
-
-app.post(
-  '/signin',
-  celebrate({
-    body: Joi.object().keys({
-      email: Joi.string().required().email(),
-      password: Joi.string().required().min(8),
-    }),
-  }),
-  login,
-);
-
-app.post(
-  '/signup',
-  celebrate({
-    body: Joi.object().keys({
-      name: Joi.string().min(2).max(30),
-      about: Joi.string().min(2).max(30),
-      avatar: Joi.string().custom(urlValidation),
-      email: Joi.string().required().email(),
-      password: Joi.string().required().min(8),
-    }),
-  }),
-  createUser,
-);
+app.use('/signin', require('./routes/signin'));
+app.use('/signup', require('./routes/signup'));
 
 app.use(auth);
 
@@ -77,17 +49,7 @@ app.use((req, res, next) => next(new NotFoundError('Страница не най
 
 app.use(errors());
 
-// eslint-disable-next-line
-app.use((err, req, res, next) => {
-  const { statusCode = 500, message } = err;
-  res
-    .status(statusCode)
-    .send({
-      message: statusCode === 500
-        ? 'На сервере произошла ошибка'
-        : message,
-    });
-});
+app.use(centralErrorProcessing);
 
 // eslint-disable-next-line no-console
 app.listen(PORT, () => console.log(`App listening on port ${PORT}`));
